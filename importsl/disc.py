@@ -46,6 +46,19 @@ This command terminates all processes.
 delete = """
 -----------------------------------------------------------------
 This command deletes data specified if exists.
+
+> /delete prefix.
+> commands > all, last, recent
+
+
+/delete all (variable)
+> when you add data by /add_data, item = variable, and you will delete all mentions of the variable.
+
+/delete last 
+> deletes the last item added to the list, sorted by last uploaded.
+
+/delete recent (variable)
+> deletes the most recent mention of the variable. 
 -----------------------------------------------------------------
 """
 

@@ -7,7 +7,6 @@ from datetime import datetime
 from threading import Event
 from threading import Thread
 # from time_waste_checker.main import check_cmd
-exit = Event()
 
 
 cnn = mysql.connector.connect(
@@ -31,45 +30,38 @@ def add_data():
             return var, time
 
         while True:
+            cnn.connect()
             cursor = cnn.cursor()
-            print(data)
-
             var, time = call_inp()
 
-            if var == 'x' or time == 'x':
+            if (var == 'x') or (time == 'x'):
                 cursor.close()
 
                 cnn.close()
-                return None
+                return '/terminate'
 
             if (not re.search(r'[\d\W]', var)) and (re.match(r'(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)', time)):
                 print('Passed Validation')
                 data[var] = [time]
-
+                print('Creating..')
                 cursor.execute('insert into data(variable, time_spent, timestamp) values (%s, %s, %s)', (var, time, datetime.now()))
+                print('Created..')
                 cnn.commit()
                 continue
             else:
                 cursor.close()
-
                 cnn.close()
                 return print('Try again with correct formatting.'), add_data()
 
         return data
     except Exception as e:
         cursor.close()
-
         cnn.close()
-        return print(f'Error occurred: {e}'), add_data()
+        return print(f'Error occurred: {e}\nCannot create..'), add_data()
 
-def sleep():
-    while not exit.is_set():
-      exit.wait(10)
 
-def quit(_frame):
-    exit.set()
-
-    print("All done!")
+cursor.close()
+cnn.close()
 def delete_data():
     def get_input():
         print('\nPlease read /info delete before using this to prevent unintentional data loss.')
@@ -125,6 +117,7 @@ def delete_data():
 
     except Exception as e:
         print(f'Error found: {e}\n Not Deleted..')
+
 
 def data_map():
     print('used')
