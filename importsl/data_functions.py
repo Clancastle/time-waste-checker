@@ -1,5 +1,7 @@
 import json
 import mysql.connector
+import plotext as plx
+import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mtp
 import re, time
@@ -123,8 +125,42 @@ def data_map():
     print('used')
 
 
-def data_graph():
-    print('used')
+def render_bar(data, format='in'):
+    str = []
+
+    for item, time, stamp in data:
+        'to convert hh:mm:ss format to hh.hhh'
+        time = time.total_seconds()
+        hours = int(time // 3600)
+        minutes = int((time % 3600) // 60)
+        seconds = time % 60
+        'finish'
+
+        hours_fraction = float(hours + minutes / 60 + seconds / 3600) #type = float
+
+        item = (f'{item}', hours_fraction)# + , f'{stamp}
+        str.append(item)
+
+    "converts into float for plotext" #i tried but somehow it didnt work
+    if format == 'out':
+        items, time_values = zip(*str)
+        plt.bar(items, time_values)
+        plt.xlabel("Item")
+        plt.ylabel("Time (hours)")
+        plt.title("Time Spent on Each Item")
+
+        plt.show()
+    else:
+        items, time_values = zip(*str)
+        plx.bar(items, time_values)
+        plx.xlabel("Item")
+        plx.ylabel("Time (hours)")
+        plx.title("Time Spent on Each Item")
+
+        plx.show()
+
+    return print('Bar chart rendered..')
+
 
 
 def linear_regression():

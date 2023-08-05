@@ -9,6 +9,7 @@ from threading import Thread
 
 cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka'
 )
+cursor = cnn.cursor()
 
 '# if there is something i learnt , always use return'
 '# like return print()'
@@ -110,7 +111,19 @@ def check_cmd(inp):
             return data_functions.data_map()
 
         elif inp.split()[0] == '/data_graph':
-            return data_functions.data_graph()
+            cnn.cursor().execute('select * from data;')
+            print('done collecting')
+            data = cursor.fetchall()
+            print('failed to load')
+
+            if inp.split()[1] == 'out':
+                cnn.cursor().close()
+                cnn.close()
+                return data_functions.render_bar(data, format='out')
+            else:
+                cnn.cursor().close()
+                cnn.close()
+                return data_functions.render_bar(data, format='in')
 
         elif inp.split()[0] == '/linear_regression':
             return data_functions.linear_regression()
