@@ -7,9 +7,8 @@ import mysql.connector
 from threading import Thread
 # from importsl.disc import cmd_disc
 
-cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka'
-)
-cursor = cnn.cursor()
+cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka')
+
 
 '# if there is something i learnt , always use return'
 '# like return print()'
@@ -111,12 +110,18 @@ def check_cmd(inp):
             return data_functions.data_map()
 
         elif inp.split()[0] == '/data_graph':
-            if inp.split()[1] == 'out':
 
-                return data_functions.render_bar(format='out')
-            else:
+            if (len(inp.split()) > 1):
 
-                return data_functions.render_bar()
+                if inp.split()[1] != 'out':
+                    return data_functions.render_bar(format='in')
+
+                if inp.split()[1] == 'out':
+                    return data_functions.render_bar(format='out')
+
+            return data_functions.render_bar(format='in')
+        #i might have to make a new table for each day, in a database, and compare tables each day to see if they match.
+
 
         elif inp.split()[0] == '/linear_regression':
             return data_functions.linear_regression()
@@ -186,4 +191,5 @@ while True:
 
 
 print('CLOSING CONNECTION...')
-# cnn.close()
+cnn.cursor().close()
+cnn.close()

@@ -121,13 +121,18 @@ def data_map():
 
 
 def render_bar(format='in'):
+    cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka')
+
+    cnn.connect()
+
+
+    cursor = cnn.cursor()
     str = []
 
     cursor.execute('select * from data;')
     print('Collecting Data..')
     tim.sleep(2)
     data = cursor.fetchall()
-    print(data)
 
     for item, time, stamp in data:
         'to convert hh:mm:ss format to hh.hhh'
@@ -160,8 +165,9 @@ def render_bar(format='in'):
 
         plx.show()
 
+    cnn.cursor().close()
+    cnn.close()
     return print('Bar chart rendered..')
-
 
 
 def linear_regression():

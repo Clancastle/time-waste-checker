@@ -48,3 +48,6 @@ taking a break on the /delete last bug. (race condition stuff i think?)
 do smtn else, work on matplot lib or a game.
 
 i think its good pregress so far. but im gonna go learn more more on ai, and ways of saving storing and useing data so i can finish this projet  better.
+
+i might have to make a new table for each day, in a database, and compare tables each day to see if they match.
+

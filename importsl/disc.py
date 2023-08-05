@@ -92,6 +92,15 @@ data_graph = """
 -----------------------------------------------------------------
 Returns a graph of the data collected, to see how well you've been doing.
 -----------------------------------------------------------------
+
+> commands > /data_graph, data_graph(in/out)
+
+/data_graph in
+displays a bar chart of data in current table for today, and returns it in terminal
+
+/data_graph out
+displays a bar chart of data outside of terminal, and that bar chart is easier to visualize.
+
 """
 #  /
 data_map = """
