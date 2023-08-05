@@ -4,22 +4,19 @@ import plotext as plx
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib as mtp
-import re, time
+import re
+import time as tim
 from datetime import datetime
 from threading import Event
 from threading import Thread
 # from time_waste_checker.main import check_cmd
 
 
-cnn = mysql.connector.connect(
-    port=3306,
-    host='localhost',
-    database='timeproject',
-    password='kartoshka'
-)
+cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka')
 
-
+cnn.connect()
 data = {}
+
 cursor = cnn.cursor()
 def add_data():
     try:
@@ -62,8 +59,6 @@ def add_data():
         return print(f'Error occurred: {e}\nCannot create..'), add_data()
 
 
-cursor.close()
-cnn.close()
 def delete_data():
     def get_input():
         print('\nPlease read /info delete before using this to prevent unintentional data loss.')
@@ -125,8 +120,14 @@ def data_map():
     print('used')
 
 
-def render_bar(data, format='in'):
+def render_bar(format='in'):
     str = []
+
+    cursor.execute('select * from data;')
+    print('Collecting Data..')
+    tim.sleep(2)
+    data = cursor.fetchall()
+    print(data)
 
     for item, time, stamp in data:
         'to convert hh:mm:ss format to hh.hhh'

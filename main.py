@@ -111,19 +111,12 @@ def check_cmd(inp):
             return data_functions.data_map()
 
         elif inp.split()[0] == '/data_graph':
-            cnn.cursor().execute('select * from data;')
-            print('done collecting')
-            data = cursor.fetchall()
-            print('failed to load')
-
             if inp.split()[1] == 'out':
-                cnn.cursor().close()
-                cnn.close()
-                return data_functions.render_bar(data, format='out')
+
+                return data_functions.render_bar(format='out')
             else:
-                cnn.cursor().close()
-                cnn.close()
-                return data_functions.render_bar(data, format='in')
+
+                return data_functions.render_bar()
 
         elif inp.split()[0] == '/linear_regression':
             return data_functions.linear_regression()
