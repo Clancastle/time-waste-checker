@@ -7,6 +7,7 @@ import matplotlib as mtp
 import re
 import time as tim
 from datetime import datetime
+import numpy as np
 
 date_yymmdd = datetime.today().strftime('%Y_%m_%d')
 
@@ -16,9 +17,8 @@ cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject
 cnn.connect()
 data = {}
 
-streak = 0
-
 cursor = cnn.cursor()
+
 def add_data():
 
     def call_inp():
@@ -172,10 +172,203 @@ def render_bar(format='in'):
     except ValueError:
         return print(f'Table {date_yymmdd} exists but has no values since all items were deleted.')
 
+def compare_tables(query):
+
+    try:
+        qu = query.strip()
+        input = qu.split(' ')[1:] #throws away /compare part
+
+
+        cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka')
+
+        cnn.connect()
+        cursor = cnn.cursor()
+        str = []
+
+        'get either all tables, or the ones specified after /compare'
+        if input[0] == 'all':
+
+            exst = clean_input()
+            for i in exst:
+
+
+                cursor.execute(f'select * from {i[0]};')
+                print(f'Collecting Table {i}..  ')
+                tim.sleep(.00001)
+                data = cursor.fetchall()
+
+                # print(data)
+                print(str)
+
+                for item, time, stamp in data:
+                    'to convert hh:mm:ss format to hh.hhh'
+                    time = time.total_seconds()
+                    hours = int(time // 3600)
+                    minutes = int((time % 3600) // 60)
+                    seconds = time % 60
+                    'finish'
+
+                    hours_fraction = float(hours + minutes / 60 + seconds / 3600)  # type = float
+
+                    itemsx = (f'{item}', hours_fraction)  # + , f'{stamp}
+                    str.append([itemsx]) #makes a list for data in table
+
+            items, time_values = zip(*str)
+
+
+
+
+
+
+            plt.boxplot(time_values, labels=items)
+            plt.show()
+            cnn.cursor().close()
+            cnn.close()
+            return None
+
+
+        for i in input:
+
+            cursor.execute(f'select * from {i};')
+            print(f'Collecting Table {i}..  ')
+            tim.sleep(.7)
+            data = cursor.fetchall()
+
+            for item, time, stamp in data:
+                'to convert hh:mm:ss format to hh.hhh'
+                time = time.total_seconds()
+                hours = int(time // 3600)
+                minutes = int((time % 3600) // 60)
+                seconds = time % 60
+                'finish'
+
+                hours_fraction = float(hours + minutes / 60 + seconds / 3600)  # type = float
+
+                itemsx = (f'{item}', hours_fraction)  # + , f'{stamp}
+                str.append(itemsx)
+
+        items, time_values = zip(*str)
+        # mtp.pyplot.stem(items, time_values)
+        mtp.pyplot.table(items, time_values)
+        plt.show()
+        cnn.cursor().close()
+        cnn.close()
+        return None
+
+    except ValueError:
+        print(f'Table {i} exists but has no values since all items were deleted.')
+
+    except Exception as e:
+        print(e)
+def pie(data, all=False):
+    str = []
+
+    cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka')
+    cnn.connect()
+    cursor = cnn.cursor()
+    if all:
+
+        exst = clean_input()
+        for i in exst:
+
+            cursor.execute(f'select * from {i[0]};')
+            print(f'Collecting Table {i}..  ')
+            tim.sleep(.5)
+            data = cursor.fetchall()
+
+            for item, time, stamp in data:
+                'to convert hh:mm:ss format to hh.hhh'
+                time = time.total_seconds()
+                hours = int(time // 3600)
+                minutes = int((time % 3600) // 60)
+                seconds = time % 60
+                'finish'
+
+                hours_fraction = float(hours + minutes / 60 + seconds / 3600)  # type = float
+
+                itemsx = (f'{item}', hours_fraction)  # + , f'{stamp}
+                str.append(itemsx)
+
+        labels = [item for item, value in str]
+        values = [value for item, value in str]
+        plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=170)
+        plt.show()
+        cnn.cursor().close()
+        cnn.close()
+        return None
+
+    data1 = data.split(' ')[1:]
+    for i in data1:
+        cursor.execute(f'select * from {i};')
+        print(f'Collecting Table {i}..  ')
+        tim.sleep(.5)
+        data = cursor.fetchall()
+
+        for item, time, stamp in data:
+            'to convert hh:mm:ss format to hh.hhh'
+            time = time.total_seconds()
+            hours = int(time // 3600)
+            minutes = int((time % 3600) // 60)
+            seconds = time % 60
+            'finish'
+
+            hours_fraction = float(hours + minutes / 60 + seconds / 3600)  # type = float
+
+            itemsx = (f'{item}', hours_fraction)  # + , f'{stamp}
+            str.append(itemsx)
+
+    labels = [item for item, value in str]
+    values = [value for item, value in str]
+    plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=170)
+    plt.show()
+    cnn.cursor().close()
+    cnn.close()
+    return None
+'works ig..'
+
+def scatterplot_all():
+    try:
+        tbl_list = clean_input()
+
+        cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka')
+
+        cnn.connect()
+        cursor = cnn.cursor()
+        str = []
+
+        'get either all tables, or the ones specified after /compare'
+
+
+        for i in tbl_list:
+
+            cursor.execute(f'select * from {i[0]};')
+            data = cursor.fetchall()
+
+            print(f'Collecting Table {i}..  ')
+            tim.sleep(.5)
+
+            for item, time, stamp in data:
+                'to convert hh:mm:ss format to hh.hhh'
+                time = time.total_seconds()
+                hours = int(time // 3600)
+                minutes = int((time % 3600) // 60)
+                seconds = time % 60
+                hours_fraction = float(hours + minutes / 60 + seconds / 3600)  # type = float
+
+                itemsx = (f'{item}', hours_fraction)  # + , f'{stamp}
+                str.append(itemsx)
+        items, time_values = zip(*str)
+        mtp.pyplot.scatter(items, time_values)
+        plt.show()
+        cnn.cursor().close()
+        cnn.close()
+
+    except ValueError:
+        print(f'Tables exists but have no values since all items were deleted?')
+    except Exception as e:
+        print(e)
 def linear_regression():
     pass
-
-
 def streaks(base=0):
     streak = base
     last = ''
@@ -194,25 +387,22 @@ def streaks(base=0):
             d-=1
 
             print(d)
-            for x in range(len(data)):
-
-                i_yr, i_m, i_d = data[x][0].split('_')
-                i_yr, i_m, i_d = int(i_yr), int(i_m), int(i_m)
-                if (i_yr == yr) and (i_m == m) and (i_d == d):
-                    print('oo')
-                    streak+=1
-                    d-=1
-                    print(streak)
-                    continue
-
-
-
-
         i+=1
+        for x in range(len(data)):
+
+            i_yr, i_m, i_d = data[x][0].split('_')
+            i_yr, i_m, i_d = int(i_yr), int(i_m), int(i_m)
+            if (i_yr == yr) and (i_m == m) and (i_d == d):
+                print('oo')
+                streak += 1
+                d -= 1
+                print(streak)
+                continue
 
 
 
     return data
+'dont do for now'
 
 def clean_input():
     data = show_tables()
@@ -237,5 +427,6 @@ def show_tables():
     cnn.close()
     return existing_tables
 
-# print(streaks())
-print(streaks())
+# compare_tables('/compare 2023_09_30 2023_09_29 2023_09_28 2023_09_27')
+# compare_tables('/compare all')
+pie('/all', all=True)
