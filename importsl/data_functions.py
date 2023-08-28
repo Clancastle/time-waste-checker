@@ -260,7 +260,7 @@ def compare_tables(query):
 
     except Exception as e:
         print(e)
-def pie(data, all=False):
+def pie(all=False):
     str = []
 
     cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka')
@@ -429,4 +429,3 @@ def show_tables():
 
 # compare_tables('/compare 2023_09_30 2023_09_29 2023_09_28 2023_09_27')
 # compare_tables('/compare all')
-pie('/all', all=True)

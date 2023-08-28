@@ -3,9 +3,8 @@ import time
 
 from importsl import data_functions
 from importsl import disc
-import threading
 import mysql.connector
-from threading import Thread
+
 # from importsl.disc import cmd_disc
 
 cnn = mysql.connector.connect(port=3306, host='localhost', database='timeproject', password='kartoshka')
@@ -126,6 +125,9 @@ def check_cmd(inp):
 
         if inp.split()[0] == '/tables':
             return print(data_functions.show_tables())
+
+        if inp.split()[0] == '/pie all':
+            return print(data_functions.pie(all=True))
 
         if inp.split()[0] == '/':
             return start_script()

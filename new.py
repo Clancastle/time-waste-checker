@@ -1,12 +1,4 @@
-import json
 import mysql.connector
-import plotext as plx
-import matplotlib.pyplot as plt
-import pandas as pd
-import matplotlib as mtp
-import re
-import time as tim
-from datetime import datetime
 from importsl import data_functions
 
 'compare tables in database'
